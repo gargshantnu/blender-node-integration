@@ -15,11 +15,11 @@ fileName = sys.argv[5]
 # print(fileName)
 
 # Load the model
-bpy.ops.import_scene.fbx(filepath=f"../uploads/{fileName}.fbx")
+bpy.ops.import_scene.fbx(filepath=f"uploads/{fileName}.fbx")
 
 
 # Export as GLB
-bpy.ops.export_scene.gltf(filepath=f"../uploads/{fileName}.glb", export_format='GLB')
+bpy.ops.export_scene.gltf(filepath=f"uploads/{fileName}.glb", export_format='GLB')
 
 
 # Quit Blender
