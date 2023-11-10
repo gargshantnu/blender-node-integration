@@ -11,12 +11,12 @@ const FbxLoader = ({ editProperties }) => {
     window.shantnu ? window.shantnu.push(1) : (window.shantnu = [1]);
     console.log("fbx loader", new Date().getTime());
 
-    const [isPlaying, setIsPlaying] = useState(true);
+    // const [isPlaying, setIsPlaying] = useState(true);
 
-    function togglePlayPause() {
-        console.log("is playing", isPlaying, !isPlaying);
-        setIsPlaying(!isPlaying);
-    }
+    // function togglePlayPause() {
+    //     console.log("is playing", isPlaying, !isPlaying);
+    //     setIsPlaying(!isPlaying);
+    // }
     const clock = new THREE.Clock();
 
     let mixer;
@@ -122,8 +122,8 @@ const FbxLoader = ({ editProperties }) => {
 
     // const animate = useRef(() => {});
     const animate = () => {
-        console.log("isPlaying in animate ", isPlaying);
-        if (!isPlaying) return;
+        // console.log("isPlaying in animate ", isPlaying);
+        // if (!isPlaying) return;
         requestAnimationFrame(animate);
 
         const delta = clock.getDelta();
@@ -163,11 +163,11 @@ const FbxLoader = ({ editProperties }) => {
     return (
         <div className="App">
             <h2>Hello, below is preview of selected .FBX file for upload</h2>
-            {file ? (
+            {/* {file ? (
                 <button onClick={togglePlayPause}>Play/Pause</button>
             ) : (
                 <div>No file selected</div>
-            )}
+            )} */}
         </div>
     );
 };
