@@ -4,8 +4,12 @@ const multer = require("multer");
 const { spawn } = require("child_process");
 const path = require("path");
 
+const cors = require("cors"); 
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(express.static("uploads"));
@@ -37,16 +41,24 @@ app.post(
     (req, res) => {
         const { fileName, scale, position } = req.body;
 
+        const formatParam = (prefix = "", value) =>
+            value ? `${prefix.toLowerCase()}=${value}` : "";
+
         // Call the Blender script to edit properties
-        const editProcess = spawn("blender", [
+        const args = [
             "--background",
             "--python",
             path.join(__dirname, "blender-scripts", "edit_properties.py"),
             "--",
             fileName,
-            scale,
-            position,
-        ]);
+            formatParam("scaleX", scale.x),
+            formatParam("scaleY", scale.y),
+            formatParam("scaleZ", scale.z),
+            formatParam("positionX", position.x),
+            formatParam("positionY", position.y),
+            formatParam("positionZ", position.z),
+        ];
+        const editProcess = spawn("blender", args);
 
         editProcess.stdout.on("data", (data) => {
             console.log(`Blender Edit Output: ${data}`);
@@ -71,8 +83,9 @@ app.post(
     "/export/glb",
     // authenticate,
     (req, res) => {
-        const { fileName } = req.body;
+        let { fileName } = req.body;
         try {
+            fileName = fileName.split(".")[0];
             // Call the Blender script to export as GLB
             const exportProcess = spawn("blender", [
                 "--background",
@@ -92,6 +105,7 @@ app.post(
 
             exportProcess.on("close", (code) => {
                 if (code === 0) {
+                    res.setHeader('Content-Disposition', `attachment; filename="${fileName}.glb"`);
                     res.status(200).sendFile(
                         path.join(__dirname, "uploads", `${fileName}.glb`)
                     );
@@ -110,9 +124,10 @@ app.post(
     "/export/fbx",
     // authenticate,
     (req, res) => {
-        const { fileName } = req.body;
+        let { fileName } = req.body;
 
         try {
+            fileName = fileName.split(".")[0];
             // Call the Blender script to export as GLB
             const exportProcess = spawn("blender", [
                 "--background",
@@ -133,8 +148,9 @@ app.post(
             exportProcess.on("close", (code) => {
                 console.log("Close", code);
                 if (code === 0) {
+                    res.setHeader('Content-Disposition', `attachment; filename="${fileName}.fbx"`);
                     res.status(200).sendFile(
-                        path.join(__dirname, "uploads", `${fileName}.glb`)
+                        path.join(__dirname, "uploads", `${fileName}.fbx`)
                     );
                 } else {
                     res.status(500).send("Failed to export as .fbx");
