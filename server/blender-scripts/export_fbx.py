@@ -10,7 +10,7 @@ bpy.ops.object.delete()
 
 
 # Get command line arguments
-# print(sys.argv)
+print(sys.argv)
 
 fileName = sys.argv[5]
 
