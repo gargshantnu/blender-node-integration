@@ -6,7 +6,8 @@ import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 
 const FbxLoader = ({ editProperties }) => {
     let camera, scene, renderer, stats;
-
+    const { file, scale, position } = editProperties;
+    console.log("file", file);
     window.shantnu ? window.shantnu.push(1) : (window.shantnu = [1]);
     console.log("fbx loader", new Date().getTime());
 
@@ -24,11 +25,6 @@ const FbxLoader = ({ editProperties }) => {
         console.log("init animations");
         const container = document.createElement("div");
         document.body.appendChild(container);
-
-        // const playPauseButton = document.createElement("button");
-        // playPauseButton.textContent = "Play/Pause";
-        // playPauseButton.addEventListener("click", togglePlayPause);
-        // document.body.appendChild(playPauseButton);
 
         camera = new THREE.PerspectiveCamera(
             45,
@@ -73,7 +69,7 @@ const FbxLoader = ({ editProperties }) => {
         // samba_dancing
         // stanford-bunny
         // nurbs
-        loader.load("samba_dancing.fbx", function (object) {
+        loader.load(URL.createObjectURL(file), function (object) {
             mixer = new THREE.AnimationMixer(object);
 
             const action = mixer.clipAction(object.animations[0]);
@@ -148,8 +144,7 @@ const FbxLoader = ({ editProperties }) => {
     const isLoadedRef = useRef(false);
 
     useEffect(() => {
-        // const { file, scale, position } = editProperties;
-        // if (!file) return;
+        if (!file) return;
         if (!isLoadedRef.current) {
             init();
             // animate.current();
@@ -159,8 +154,12 @@ const FbxLoader = ({ editProperties }) => {
     }, []);
     return (
         <div className="App">
-            Hello
-            <button onClick={togglePlayPause}>Play/Pause</button>
+            <h2>Hello, below is preview of selected .FBX file for upload</h2>
+            {file ? (
+                <button onClick={togglePlayPause}>Play/Pause</button>
+            ) : (
+                <div>No file selected</div>
+            )}
         </div>
     );
 };
