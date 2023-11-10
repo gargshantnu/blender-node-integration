@@ -10,11 +10,11 @@ bpy.ops.object.delete()
 
 
 # Get command line arguments
-print(sys.argv)
+# print(sys.argv)
 
 fileName = sys.argv[5]
 
-print(fileName)
+# print(fileName)
 # Load the model
 
 # todo this relative path might not work in ec2
