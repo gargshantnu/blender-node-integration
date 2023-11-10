@@ -82,6 +82,14 @@ const FbxLoader = ({ editProperties }) => {
                 }
             });
 
+            if (scale) {
+                console.log("Scale passed", scale);
+                object.scale.set(scale.x, scale.y, scale.z);
+            }
+            if (position) {
+                object.position.set(position.x, position.y, position.z);
+            }
+
             scene.add(object);
         });
 
